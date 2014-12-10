@@ -31,3 +31,5 @@ RUN git clone https://github.com/mozilla-services/FindMyDevice
 RUN apt-get update
 RUN apt-get install -yq make
 RUN cd FindMyDevice && ./install.bash
+
+# failing because of code.google.com/p/go.net/websocket

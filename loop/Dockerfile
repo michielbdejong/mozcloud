@@ -30,6 +30,3 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x
 
 RUN git clone https://github.com/mozilla-services/loop-server
 RUN cd loop-server && make install
-
-RUN git clone https://github.com/mozilla-services/FindMyDevice
-RUN cd FindMyDevice && ./install.bash
