@@ -4,6 +4,7 @@ RUN apt-get update \
 		build-essential \
 		curl \
 		git \
+		python \
 		redis-server \
 	&& rm -rf /var/lib/apt/lists/*
 
