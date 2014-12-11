@@ -1,8 +1,12 @@
 FROM ubuntu
 RUN apt-get update \
 	&& apt-get install -yq \
+		g++ \
+		git \
 		libgmp3-dev \
-	&& echo IN PRODUCTION: rm -rf /var/lib/apt/lists/*
+		make \
+		python \
+	&& rm -rf /var/lib/apt/lists/*
 
 RUN apt-get install -yq curl
 
@@ -28,14 +32,9 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x
 
 RUN npm install -g grunt-cli
 
-RUN apt-get install -yq git
-
 RUN git clone https://github.com/mozilla/fxa-content-server
 COPY local.json fxa-content-server/server/config/local.json
 
-RUN apt-get install -yq python
-RUN apt-get install -yq make
-RUN apt-get install -yq g++
 RUN cd fxa-content-server/ && npm install
 RUN cd fxa-content-server/ && grunt build
 

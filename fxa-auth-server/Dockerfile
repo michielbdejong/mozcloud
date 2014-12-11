@@ -1,8 +1,12 @@
 FROM ubuntu
 RUN apt-get update \
 	&& apt-get install -yq \
+		git \
+		g++ \
 		libgmp3-dev \
-	&& echo IN PRODUCTION: rm -rf /var/lib/apt/lists/*
+		make \
+		python \
+	&& rm -rf /var/lib/apt/lists/*
 
 RUN apt-get install -yq curl
 
@@ -26,10 +30,8 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x
   && npm install -g npm@"$NPM_VERSION" \
   && npm cache clear
 
-RUN apt-get install -yq git
-
 RUN git clone https://github.com/mozilla/fxa-auth-server
-RUN apt-get install -yq python
+
 RUN cd fxa-auth-server/ && npm install
 
 EXPOSE 9000
