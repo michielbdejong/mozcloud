@@ -30,6 +30,7 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x
 RUN git clone https://github.com/mozilla-services/FindMyDevice
 RUN apt-get update
 RUN apt-get install -yq make
+RUN apt-get install -yq mercurial
 RUN cd FindMyDevice && ./install.bash
 
 # failing because of code.google.com/p/go.net/websocket

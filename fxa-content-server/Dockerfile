@@ -33,6 +33,9 @@ RUN apt-get install -yq git
 RUN git clone https://github.com/mozilla/fxa-content-server
 COPY local.json fxa-content-server/server/config/local.json
 
+RUN apt-get install -yq python
+RUN apt-get install -yq make
+RUN apt-get install -yq g++
 RUN cd fxa-content-server/ && npm install
 RUN cd fxa-content-server/ && grunt build
 
