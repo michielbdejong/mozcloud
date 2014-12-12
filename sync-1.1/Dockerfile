@@ -3,7 +3,7 @@
 FROM ubuntu 
 
 RUN apt-get update \
-	&& apt-get update -yq \
+	&& apt-get install -yq \
 		build-essential \
 		git \
 		libpq-dev \
