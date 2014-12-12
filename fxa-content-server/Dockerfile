@@ -30,11 +30,12 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x
   && npm cache clear
 
 RUN npm install -g grunt-cli
+RUN npm install -g vladikoff/freight
 
 RUN git clone https://github.com/mozilla/fxa-content-server
 COPY local.json fxa-content-server/server/config/local.json
 
-RUN cd fxa-content-server/ && npm install
+RUN export FREIGHT_URL=https://freight.dev.lcip.org && cd fxa-content-server/ && freight
 RUN cd fxa-content-server/ && grunt build
 
 EXPOSE 3030
