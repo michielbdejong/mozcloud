@@ -9,3 +9,4 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/mozilla-services/syncserver
 RUN cd syncserver && make build
+RUN cd syncserver && make test
