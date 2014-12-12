@@ -1,14 +1,13 @@
 FROM ubuntu
 RUN apt-get update \
 	&& apt-get install -yq \
+		curl \
 		git \
 		g++ \
 		libgmp3-dev \
 		make \
 		python \
 	&& rm -rf /var/lib/apt/lists/*
-
-RUN apt-get install -yq curl
 
 ######
 # Node
