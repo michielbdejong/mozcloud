@@ -9,11 +9,8 @@ Docker
 ````
 sudo docker build -t michielbdejong/fxa-content-server fxa-content-server/
 sudo docker build -t michielbdejong/fxa-auth-server fxa-auth-server/
-#sudo docker build -t michielbdejong/loop-server loop-server/
-#sudo docker build -t michielbdejong/sync-1.1 sync-1.1/
 sudo docker build -t michielbdejong/sync-1.5 sync-1.5/
-#sudo docker build -t michielbdejong/findmydevice findmydevice/
-#sudo docker build -t michielbdejong/pushgo pushgo/
+sudo docker build -t michielbdejong/fxa-https-proxy fxa-https-proxy/
 ````
 
 ## Run
@@ -21,28 +18,30 @@ sudo docker build -t michielbdejong/sync-1.5 sync-1.5/
 ````
 sudo docker run -d --net=host michielbdejong/fxa-content-server
 AUTH_CONTAINER=$(sudo docker run -d --net=host michielbdejong/fxa-auth-server)
-#sudo docker run -d --net=host michielbdejong/loop-server
-#sudo docker run -d --net=host michielbdejong/sync-1.1
 sudo docker run -d --net=host michielbdejong/sync-1.5
-#sudo docker run -d --net=host michielbdejong/findmydevice
-#sudo docker run -d --net=host michielbdejong/pushgo
-
-sudo docker logs -f $AUTH_CONTAINER | grep verify_email
+sudo docker run -d --net=host michielbdejong/fxa-https-proxy
 ````
-
-* loop-server is blocked by https://bugzilla.mozilla.org/show_bug.cgi?id=1111210
-* findmydevice and pushgo are not implemented yet
-* sync-1.1 is only needed for Firefox < 29
 
 ## Configuring Firefox Desktop
 
-Enter 'about:config' in the URL bar, and edit the following settings:
+* Visit https://localhost:3031/ and permanently accept the self-signed cert.
 
-* services.sync.tokenServerURI			http://localhost:5000/token/1.0/sync/1.5
+* Enter 'about:config' in the URL bar, and edit the following settings:
 
-* identity.fxaccounts.auth.uri			http://localhost:9000/v1
+  * services.sync.tokenServerURI			http://localhost:5000/token/1.0/sync/1.5
 
-* identity.fxaccounts.remote.force_auth.uri	http://localhost:3030/force_auth?service=sync&context=fx_desktop_v1
-* identity.fxaccounts.remote.signin.uri		http://localhost:3030/signin?service=sync&context=fx_desktop_v1
-* identity.fxaccounts.remote.signup.uri		http://localhost:3030/signup?service=sync&context=fx_desktop_v1
-* identity.fxaccounts.settings.uri		http://localhost:3030/settings
+  * identity.fxaccounts.auth.uri			http://localhost:9000/v1
+
+  * identity.fxaccounts.remote.force_auth.uri	https://localhost:3031/force_auth?service=sync&context=fx_desktop_v1
+  * identity.fxaccounts.remote.signin.uri		https://localhost:3031/signin?service=sync&context=fx_desktop_v1
+  * identity.fxaccounts.remote.signup.uri		https://localhost:3031/signup?service=sync&context=fx_desktop_v1
+  * identity.fxaccounts.settings.uri		https://localhost:3031/settings
+
+* Sign up for sync on your local Mozilla Cloud Services instance from Menu -> Edit -> Preferrences -> Sync.
+* The verification email does not really get sent out (I think!), so run:
+
+````
+sudo docker logs -f $AUTH_CONTAINER | grep verify_email
+````
+
+To find the email verification link. If you see a blank page on about:accounts?action=signup, you can run fxAccounts.getAccountsSignUpURI() in the console to debug. Viewing the logs of the other docker containers may also help. If not, please [open an issue](https://github.com/michielbdejong/mozcloud/issues/new). Good luck.
