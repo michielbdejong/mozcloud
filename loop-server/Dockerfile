@@ -30,3 +30,9 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x
 
 RUN git clone https://github.com/mozilla-services/loop-server
 RUN cd loop-server && make install
+RUN cp loop-server/config/sample.json loop-server/config/dev.json
+
+EXPOSE 5000
+CMD cd loop-server && make runserver
+
+# loop-server is blocked by https://bugzilla.mozilla.org/show_bug.cgi?id=1111210
