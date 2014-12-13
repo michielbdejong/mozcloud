@@ -4,4 +4,5 @@ COPY proxy.js proxy.js
 RUN npm install http-proxy
 
 EXPOSE 3031
+EXPOSE 9002
 CMD node proxy.js

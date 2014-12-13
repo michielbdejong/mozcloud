@@ -32,6 +32,18 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x
 RUN git clone https://github.com/mozilla/fxa-auth-server
 
 RUN cd fxa-auth-server/ && npm install
+RUN mv fxa-auth-server/config/config.js . \
+	&& cat config.js \
+		| sed 's/http:\/\/127.0.0.1:3030/https:\/\/127.0.0.1:3031/g' \
+		| sed 's/http:\/\/127.0.0.1:9000/https:\/\/127.0.0.1:9002/g' \
+		> fxa-auth-server/config/config.js \
+	&& rm config.js
+RUN mv fxa-auth-server/config/dev.json . \
+	&& cat dev.json \
+		| sed 's/http:\/\/127.0.0.1:3030/https:\/\/127.0.0.1:3031/g' \
+		| sed 's/http:\/\/127.0.0.1:9000/https:\/\/127.0.0.1:9002/g' \
+		> fxa-auth-server/config/dev.json \
+	&& rm dev.json
 
 EXPOSE 9000
 EXPOSE 9001
