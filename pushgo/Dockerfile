@@ -11,7 +11,8 @@ RUN rm -rf /usr/local/src
 RUN git clone https://github.com/mozilla-services/pushgo
 RUN apt-get remove -y -q bzr automake flex bison libtool cloog-ppl wget git
 
-RUN cp /pushgo /gopath/src/app
+RUN mkdir -p /gopath/src
+RUN mv pushgo /gopath/src/app
 
 WORKDIR /gopath/src/app
 RUN make
@@ -26,3 +27,5 @@ EXPOSE 3000
 
 ENV PUSHGO_METRICS_STATSD_HOST :8125
 ENTRYPOINT ["./simplepush", "-config=config.docker.toml"]
+
+# current problem: go can't find git, for some reason.
